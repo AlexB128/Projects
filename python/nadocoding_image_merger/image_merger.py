@@ -24,7 +24,7 @@ def del_file():
 
 def browse_dest_path():
     folder_selected = filedialog.askdirectory()
-    if folder_selected is '':
+    if folder_selected == '':
         return
     #print(folder_selected)
     txt_dest_path.delete(0, END)
