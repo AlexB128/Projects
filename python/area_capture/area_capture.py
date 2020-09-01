@@ -1,4 +1,4 @@
-# >pyinstaller --onefile area_capture.py
+# pyinstaller --onefile area_capture.py
 import time
 import keyboard
 import mouse
