@@ -65,7 +65,7 @@ def merge_image():
 
 def start():
     print("Width : ", cmb_width.get())
-    print("Span : ", cmb_space.get())
+    print("Space : ", cmb_space.get())
     print("Format : ", cmb_format.get())
 
     if list_file.size() == 0:
@@ -97,7 +97,7 @@ list_file = Listbox(list_frame, selectmode="extended", height=15, yscrollcommand
 list_file.pack(side="left", fill="both", expand=True)
 scrollbar.config(command=list_file.yview)
 
-path_frame = LabelFrame(root, text="Save path")
+path_frame = LabelFrame(root, text="Path")
 path_frame.pack(fill="x", padx=5, pady=5, ipady=5)
 
 txt_dest_path = Entry(path_frame)
@@ -117,7 +117,7 @@ cmb_width = ttk.Combobox(frame_option, state="readonly", values=opt_width, width
 cmb_width.current(0)
 cmb_width.pack(side="left", padx=5, pady=5)
 
-lbl_space = Label(frame_option, text="span", width=8)
+lbl_space = Label(frame_option, text="Space", width=8)
 lbl_space.pack(side="left", padx=5, pady=5)
 
 opt_space = ["None", "Narrow", "Normal", "Wide"]
@@ -125,7 +125,7 @@ cmb_space = ttk.Combobox(frame_option, state="readonly", values=opt_space, width
 cmb_space.current(0)
 cmb_space.pack(side="left", padx=5, pady=5)
 
-lbl_format = Label(frame_option, text="format", width=8)
+lbl_format = Label(frame_option, text="Format", width=8)
 lbl_format.pack(side="left", padx=5, pady=5)
 
 opt_format = ["PNG", "JPG", "BMP"]
