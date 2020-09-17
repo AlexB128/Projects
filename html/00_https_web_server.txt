@@ -1,0 +1,2 @@
+> npm install -g local-web-server
+> ws --https --port 9999 --open

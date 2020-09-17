@@ -6,6 +6,7 @@ import tkinter.messagebox as msgbox
 from tkinter import *                   # __all__
 from tkinter import filedialog
 from PIL import Image
+import openpyxl
 
 root = Tk()
 root.title("Nadocoding Image Merger")
@@ -47,7 +48,7 @@ def merge_image():
     # print("Space : ", cmb_space.get())
     # print("Fromat : ", cmb_format.get())
 
-    try:
+    # try:
         # Width
         img_width = cmb_width.get()
         if img_width == "Original":
@@ -81,39 +82,75 @@ def merge_image():
 
         widths, heights = zip(*(image_sizes))
 
-        # width max, total height
-        max_width, total_height = max(widths), sum(heights)
-        
-        # Output image size
-        if img_space > 0: # space between images
-            total_height += (img_space * (len(images) - 1))
-
-        result_img = Image.new("RGB", (max_width, total_height), (255, 255, 255)) # white background
-
-        # Merge images >>>>>>>>>>>>>>>>>>>>>>>>>>>
-        y_offset = 0 # y position
-
-        for idx, img in enumerate(images):
-            # Change image size 
-            if img_width > -1:
-                img = img.resize(image_sizes[idx])
-
-            result_img.paste(img, (0, y_offset))
-            y_offset += (img.size[1] + img_space) # height + space between images
-
-            progress = (idx + 1) / len(images) * 100
-            p_var.set(progress)
-            progress_bar.update()
-        # Merge images <<<<<<<<<<<<<<<<<<<<<<<<<<<
-
         # File format option
         file_name = "image_merger." + output_format
         dest_path = os.path.join(txt_dest_path.get(), file_name)
 
-        result_img.save(dest_path)
+        if output_format != 'xlsx':
+            # width max, total height
+            max_width, total_height = max(widths), sum(heights)
+            
+            # Output image size
+            if img_space > 0: # space between images
+                total_height += (img_space * (len(images) - 1))
+
+            result_img = Image.new("RGB", (max_width, total_height), (255, 255, 255)) # white background
+
+            # Merge images >>>>>>>>>>>>>>>>>>>>>>>>>>>
+            y_offset = 0 # y position
+
+            for idx, img in enumerate(images):
+                # Change image size 
+                if img_width > -1:
+                    img = img.resize(image_sizes[idx])
+
+                result_img.paste(img, (0, y_offset))
+                y_offset += (img.size[1] + img_space) # height + space between images
+
+                progress = (idx + 1) / len(images) * 100
+                p_var.set(progress)
+                progress_bar.update()
+            # Merge images <<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+            result_img.save(dest_path)
+        else:
+            wb = openpyxl.Workbook()
+            ws = wb.worksheets[0]
+
+            column_idx = 2
+            row_idx = 1
+            defaultRowHeight = 15
+
+            for idx, img in enumerate(images):
+                # Change image size 
+                if img_width > -1:
+                    img = img.resize(image_sizes[idx])
+
+                openpyxl_img = openpyxl.drawing.image.Image(img)
+
+                width, height = image_sizes[idx]
+
+                cell_address = ws.cell(row=row_idx, column=column_idx).coordinate
+                openpyxl_img.anchor = cell_address
+                ws.add_image(openpyxl_img)
+
+                h = 0
+                height *= 0.75
+                while h < height:
+                    h += ws.row_dimensions[row_idx] if ws.row_dimensions[row_idx].height else defaultRowHeight
+                    row_idx += 1
+
+                row_idx += int(img_space / 30)
+
+                progress = (idx + 1) / len(images) * 100
+                p_var.set(progress)
+                progress_bar.update()
+
+            wb.save(dest_path)
+
         msgbox.showinfo("Information", dest_path + " created.")
-    except Exception as err:
-        msgbox.showerror("Error", err)
+    # except Exception as err:
+    #     msgbox.showerror("Error", err)
 
 # Satrt
 def start():
@@ -121,7 +158,10 @@ def start():
     # print("Width : ", cmb_width.get())
     # print("Space : ", cmb_space.get())
     # print("Format : ", cmb_format.get())
-
+    
+    p_var.set(0)
+    progress_bar.update()
+    
     # Check file list
     if list_file.size() == 0:
         msgbox.showwarning("Warning", "Select image files")
@@ -193,7 +233,7 @@ cmb_space.pack(side="left", padx=5, pady=5)
 lbl_format = Label(frame_option, text="Format", width=8)
 lbl_format.pack(side="left", padx=5, pady=5)
 
-opt_format = ["PNG", "JPG", "BMP"]
+opt_format = ["PNG", "JPG", "BMP", "XLSX"]
 cmb_format = ttk.Combobox(frame_option, state="readonly", values=opt_format, width=10)
 cmb_format.current(0)
 cmb_format.pack(side="left", padx=5, pady=5)
