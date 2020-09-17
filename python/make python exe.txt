@@ -1,1 +1,1 @@
-pyinstaller --onefile python_file.py
+pyinstaller --onefile image_merger_V2.py

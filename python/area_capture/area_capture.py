@@ -49,14 +49,15 @@ def get_mouse_drag():
 if __name__ == "__main__":
     select_rect_keys = "windows+shift+s"
     capture_keys = "ctrl+alt+s"
+    end_keys = "shift+esc"
     
     keyboard.add_hotkey(select_rect_keys, hook_mouse_event)
     keyboard.add_hotkey(capture_keys, screen_shot_to_file)
     # wouldn't work with three add_hotkey
     # keyboard.add_hotkey("ctrl+alt+c", screen_shot_to_clipboard)
 
-    print("Hit ESC to end the program.")
-    print("{:<15} : Select screen area".format(select_rect_keys))
+    print("{:<15} : Select screen area and capture".format(select_rect_keys))
     print("{:<15} : Capture".format(capture_keys))
+    print("{:<15} : End the program".format(end_keys))
 
-    keyboard.wait("esc")
+    keyboard.wait(hotkey='shift+esc')
