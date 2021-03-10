@@ -1,11 +1,8 @@
-/sandbox
+sandbox/
 
 build/
 __pycache__/
 dist/
-
+take_screenshot.*
 *.spec
-*.xlsx
-*.py
 
-take_screenshot.py
