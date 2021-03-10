@@ -1,5 +1,11 @@
-code_here.bat
-
 /sandbox
 
+build/
+__pycache__/
+dist/
+
+*.spec
 *.xlsx
+*.py
+
+take_screenshot.py
