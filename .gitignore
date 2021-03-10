@@ -1,8 +1,8 @@
 sandbox/
+hide/
 
 build/
 __pycache__/
 dist/
-take_screenshot.*
-*.spec
 
+*.spec
